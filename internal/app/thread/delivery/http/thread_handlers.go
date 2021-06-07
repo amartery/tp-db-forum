@@ -11,21 +11,18 @@ import (
 	"github.com/amartery/tp_db_forum/internal/app/thread/models"
 	"github.com/amartery/tp_db_forum/internal/app/user"
 	"github.com/amartery/tp_db_forum/internal/pkg/utils"
-	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
 type ThreadHandler struct {
 	usecaseThread thread.Usecase
 	usecaseUser   user.Usecase
-	logger        *logrus.Logger
 }
 
 func NewThreadHandler(t thread.Usecase, u user.Usecase) *ThreadHandler {
 	return &ThreadHandler{
 		usecaseThread: t,
 		usecaseUser:   u,
-		logger:        logrus.New(),
 	}
 }
 
@@ -36,7 +33,6 @@ func NewThreadHandler(t thread.Usecase, u user.Usecase) *ThreadHandler {
 // TODO: s.router.POST("/thread​/{slug_or_id}​/vote", s.VoteForBranch)
 
 func (handler *ThreadHandler) CreatePostInBranch(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting CreatePostInBranch")
 	slugOrID := ctx.UserValue("slug_or_id").(string)
 
 	thread, err := handler.usecaseThread.GetThreadIDAndForum(slugOrID)
@@ -106,7 +102,6 @@ func (handler *ThreadHandler) CreatePostInBranch(ctx *fasthttp.RequestCtx) {
 }
 
 func (handler *ThreadHandler) BranchDetailsGet(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting BranchDetailsGet")
 	slugOrID := ctx.UserValue("slug_or_id").(string)
 
 	threads, err := handler.usecaseThread.GetThread(slugOrID)
@@ -128,7 +123,6 @@ func (handler *ThreadHandler) BranchDetailsGet(ctx *fasthttp.RequestCtx) {
 }
 
 func (handler *ThreadHandler) BranchDetailsUpdate(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting BranchDetailsUpdate")
 	slugOrID := ctx.UserValue("slug_or_id").(string)
 
 	err := handler.usecaseThread.CheckThread(slugOrID)
@@ -171,7 +165,6 @@ func (handler *ThreadHandler) BranchDetailsUpdate(ctx *fasthttp.RequestCtx) {
 }
 
 func (handler *ThreadHandler) CurrentBranchPosts(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting CurrentBranchPosts")
 	slugOrID := ctx.UserValue("slug_or_id").(string)
 
 	err := handler.usecaseThread.CheckThread(slugOrID)
@@ -214,7 +207,6 @@ func (handler *ThreadHandler) CurrentBranchPosts(ctx *fasthttp.RequestCtx) {
 }
 
 func (handler *ThreadHandler) VoteForBranch(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting VoteForBranch")
 	slugOrID := ctx.UserValue("slug_or_id").(string)
 
 	vote := &models.Vote{}

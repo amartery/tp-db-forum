@@ -93,6 +93,7 @@ CREATE UNLOGGED TABLE IF NOT EXISTS Forum_user(
 
 CREATE INDEX index_forum_user ON forum_user (forum_slug, nickname);
 CREATE INDEX index_forum_user_nickname ON forum_user (nickname);
+cluster forum_user USING index_forum_user;
 
 
 

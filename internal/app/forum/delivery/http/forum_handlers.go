@@ -13,7 +13,6 @@ import (
 	// usersModels "github.com/amartery/tp_db_forum/internal/app/user/models"
 	"github.com/amartery/tp_db_forum/internal/app/user"
 	"github.com/amartery/tp_db_forum/internal/pkg/utils"
-	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
@@ -21,7 +20,6 @@ type ForumHandler struct {
 	usecaseForum  forum.Usecase
 	usecaseUser   user.Usecase
 	usecaseThread thread.Usecase
-	logger        *logrus.Logger
 }
 
 func NewForumHandler(forumUsecase forum.Usecase, userUsecase user.Usecase, threadUsecase thread.Usecase) *ForumHandler {
@@ -29,7 +27,6 @@ func NewForumHandler(forumUsecase forum.Usecase, userUsecase user.Usecase, threa
 		usecaseForum:  forumUsecase,
 		usecaseUser:   userUsecase,
 		usecaseThread: threadUsecase,
-		logger:        logrus.New(),
 	}
 }
 
@@ -40,7 +37,6 @@ func NewForumHandler(forumUsecase forum.Usecase, userUsecase user.Usecase, threa
 // TODO: s.router.GET("​/forum​/{slug}​/threads", s.ForumBranches)
 
 func (f *ForumHandler) ForumCreate(ctx *fasthttp.RequestCtx) {
-	f.logger.Info("starting ForumCreate")
 	forum := &forumModel.Forum{}
 	err := json.Unmarshal(ctx.PostBody(), &forum)
 	if err != nil {
@@ -92,7 +88,6 @@ func (f *ForumHandler) ForumCreate(ctx *fasthttp.RequestCtx) {
 }
 
 func (f *ForumHandler) ForumDetails(ctx *fasthttp.RequestCtx) {
-	f.logger.Info("starting ForumDetails")
 	slug := ctx.UserValue("slug").(string)
 	forum, err := f.usecaseForum.GetForumBySlug(slug)
 	if err != nil {
@@ -113,7 +108,6 @@ func (f *ForumHandler) ForumDetails(ctx *fasthttp.RequestCtx) {
 }
 
 func (f *ForumHandler) ForumCreateBranch(ctx *fasthttp.RequestCtx) {
-	f.logger.Info("starting ForumCreateBranch")
 	slug := ctx.UserValue("slug").(string)
 
 	thread := &threadModel.Thread{}
@@ -172,7 +166,6 @@ func (f *ForumHandler) ForumCreateBranch(ctx *fasthttp.RequestCtx) {
 }
 
 func (f *ForumHandler) CurrentForumUsers(ctx *fasthttp.RequestCtx) {
-	f.logger.Info("starting CurrentForumUsers")
 	slug := ctx.UserValue("slug").(string)
 
 	_, err := f.usecaseForum.CheckForum(slug)
@@ -216,7 +209,6 @@ func (f *ForumHandler) CurrentForumUsers(ctx *fasthttp.RequestCtx) {
 }
 
 func (f *ForumHandler) ForumBranches(ctx *fasthttp.RequestCtx) {
-	f.logger.Info("starting ForumBranches")
 	slug := ctx.UserValue("slug").(string)
 
 	_, err := f.usecaseForum.CheckForum(slug)

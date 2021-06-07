@@ -9,21 +9,18 @@ import (
 	"github.com/amartery/tp_db_forum/internal/app/user"
 	"github.com/amartery/tp_db_forum/internal/app/user/models"
 	"github.com/amartery/tp_db_forum/internal/pkg/utils"
-	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
 type UserHandler struct {
 	usecaseUser  user.Usecase
 	usecaseForum forum.Usecase
-	logger       *logrus.Logger
 }
 
 func NewUserHandler(u user.Usecase, f forum.Usecase) *UserHandler {
 	return &UserHandler{
 		usecaseUser:  u,
 		usecaseForum: f,
-		logger:       logrus.New(),
 	}
 }
 
@@ -32,7 +29,6 @@ func NewUserHandler(u user.Usecase, f forum.Usecase) *UserHandler {
 // TODO: s.router.POST("/user/{nickname}/profile", s.AboutUserUpdate)
 
 func (handler *UserHandler) CreateUser(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting CreateUser")
 	nickname := ctx.UserValue("nickname").(string)
 
 	user := &models.User{}
@@ -65,7 +61,6 @@ func (handler *UserHandler) CreateUser(ctx *fasthttp.RequestCtx) {
 }
 
 func (handler *UserHandler) AboutUserGet(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting AboutUserGet")
 	nickname := ctx.UserValue("nickname").(string)
 
 	profile, err := handler.usecaseUser.Get(nickname)
@@ -91,7 +86,6 @@ func (handler *UserHandler) AboutUserGet(ctx *fasthttp.RequestCtx) {
 }
 
 func (handler *UserHandler) AboutUserUpdate(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting AboutUserUpdate")
 	nickname := ctx.UserValue("nickname").(string)
 
 	profile := &models.User{}

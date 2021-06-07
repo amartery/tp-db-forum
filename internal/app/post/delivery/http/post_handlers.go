@@ -12,7 +12,6 @@ import (
 	"github.com/amartery/tp_db_forum/internal/app/thread"
 	"github.com/amartery/tp_db_forum/internal/app/user"
 	"github.com/amartery/tp_db_forum/internal/pkg/utils"
-	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
@@ -21,7 +20,6 @@ type PostHandler struct {
 	usecasePost   post.Usecase
 	usecaseForum  forum.Usecase
 	usecaseThread thread.Usecase
-	logger        *logrus.Logger
 }
 
 func NewPostHandler(p post.Usecase, u user.Usecase, f forum.Usecase, t thread.Usecase) *PostHandler {
@@ -30,7 +28,6 @@ func NewPostHandler(p post.Usecase, u user.Usecase, f forum.Usecase, t thread.Us
 		usecasePost:   p,
 		usecaseForum:  f,
 		usecaseThread: t,
-		logger:        logrus.New(),
 	}
 }
 
@@ -38,7 +35,6 @@ func NewPostHandler(p post.Usecase, u user.Usecase, f forum.Usecase, t thread.Us
 // TODO: s.router.POST("​/post​/{id}​/details", s.PostDetailsUpdate)
 
 func (p *PostHandler) PostDetailsGet(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting PostDetailsGet")
 	id := ctx.UserValue("id").(string)
 
 	post, err := p.usecasePost.GetPost(id)
@@ -111,7 +107,6 @@ func (p *PostHandler) PostDetailsGet(ctx *fasthttp.RequestCtx) {
 }
 
 func (p *PostHandler) PostDetailsUpdate(ctx *fasthttp.RequestCtx) {
-	logrus.Info("starting PostDetailsUpdate")
 	id := ctx.UserValue("id").(string)
 
 	idInt, err := strconv.Atoi(id)

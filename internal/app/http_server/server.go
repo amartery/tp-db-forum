@@ -14,7 +14,6 @@ import (
 
 	"github.com/amartery/tp_db_forum/internal/app/middleware"
 	"github.com/fasthttp/router"
-	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
@@ -27,7 +26,6 @@ import (
 // ForumServer ...
 type ForumServer struct {
 	config         *Config
-	logger         *logrus.Logger
 	router         *router.Router
 	usecaseForum   forum.Usecase
 	usecasePost    post.Usecase
@@ -46,7 +44,6 @@ func New(
 	userUse user.Usecase) *ForumServer {
 	return &ForumServer{
 		config:         config,
-		logger:         logrus.New(),
 		router:         router.New(),
 		usecaseForum:   forumUse,
 		usecasePost:    postUse,
@@ -57,24 +54,12 @@ func New(
 }
 
 func (s *ForumServer) Start() error {
-	if err := s.configureLogger(); err != nil {
-		return err
-	}
 	s.configureRouter()
 
-	s.logger.Info("starting statistics server" + s.config.BindAddr)
 	return fasthttp.ListenAndServe(s.config.BindAddr, s.router.Handler)
 
 }
 
-func (s *ForumServer) configureLogger() error {
-	level, err := logrus.ParseLevel(s.config.LogLevel)
-	if err != nil {
-		return err
-	}
-	s.logger.SetLevel(level)
-	return nil
-}
 
 func (s *ForumServer) configureRouter() {
 
